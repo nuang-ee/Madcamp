@@ -14,10 +14,12 @@ class CustomAdapter(private val context: Context, private val contactModelArrayL
 
         var tvname: TextView? = itemView?.findViewById(R.id.name)
         var tvnumber: TextView? = itemView?.findViewById(R.id.number)
+        var tvmail: TextView? = itemView?.findViewById(R.id.mail)
 
         fun bind (contactModel: ContactModel, context: Context) {
             tvname?.text = contactModel.getNames()
             tvnumber?.text = contactModel.getNumbers()
+            tvmail?.text = contactModel.getMails()
         }
     }
 

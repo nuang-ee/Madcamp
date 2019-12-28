@@ -1122,6 +1122,7 @@ id design_menu_item_action_area
 id design_menu_item_action_area_stub
 id design_menu_item_text
 id design_navigation_view
+id dialogTitle
 id dialog_button
 id dimensions
 id direct
@@ -1161,6 +1162,8 @@ id line1
 id line3
 id listMode
 id list_item
+id mLayout
+id mail
 id masked
 id media_actions
 id message
@@ -1361,6 +1364,7 @@ layout notification_template_media
 layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout permission_dialog
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
