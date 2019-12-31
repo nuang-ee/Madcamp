@@ -9,11 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.myfirstapp.R
 import com.example.myfirstapp.adapter.Image
 import com.example.myfirstapp.helper.GlideApp
 import com.example.myfirstapp.helper.ZoomOutPageTransformer
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrInterface
+import com.r0adkll.slidr.model.SlidrPosition
 import kotlinx.android.synthetic.main.image_fullscreen.view.*
 class GalleryFullscreenFragment : DialogFragment() {
     private var imageList = ArrayList<Image>()
@@ -38,6 +43,19 @@ class GalleryFullscreenFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
     }
+
+    var slidrInterface: SlidrInterface? = null
+    override fun onResume() {
+        super.onResume()
+        val slidrConfig = SlidrConfig.Builder().position(SlidrPosition.VERTICAL).build()
+        if(slidrInterface == null) {
+            val container = view?.findViewById<CoordinatorLayout>(R.id.content_container)
+            slidrInterface = container?.let { Slidr.replace(it, slidrConfig) }
+            //.findViewById(R.id.content_container), SlidrConfig.Builder().position(
+            //SlidrPosition.LEFT).build())
+        }
+    }
+
     private fun setCurrentItem(position: Int) {
         viewPager.setCurrentItem(position, false)
     }

@@ -146,7 +146,7 @@ class ThirdFragment : Fragment() {
                 val windSpeed = wind.getString("speed")
                 val weatherDescription = weather.getString("description")
 
-                val address = jsonObj.getString("name")+", "+sys.getString("country")
+                //val address = jsonObj.getString("name")+", "+sys.getString("country")
 
                 /* Populating extracted data into our views */
                 //view?.findViewById<TextView>(R.id.address)?.text = address

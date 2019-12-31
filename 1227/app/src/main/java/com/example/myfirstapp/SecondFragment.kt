@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,10 @@ import com.example.myfirstapp.adapter.GalleryImageAdapter
 import com.example.myfirstapp.adapter.GalleryImageClickListener
 import com.example.myfirstapp.adapter.Image
 import com.example.myfirstapp.fragment.GalleryFullscreenFragment
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrInterface
+import com.r0adkll.slidr.model.SlidrPosition
 
 
 class SecondFragment : Fragment(), GalleryImageClickListener {
@@ -18,6 +23,7 @@ class SecondFragment : Fragment(), GalleryImageClickListener {
     private val imageList = ArrayList<Image>()
     lateinit var galleryAdapter: GalleryImageAdapter
     private var recyclerView: RecyclerView? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +71,7 @@ class SecondFragment : Fragment(), GalleryImageClickListener {
         imageList.add(Image("https://i.ibb.co/L1m1NxP/girl.jpg", "Mountain Girl"))
         galleryAdapter.notifyDataSetChanged()
     }
+
 
     override fun onClick(position: Int) {
         val bundle = Bundle()
