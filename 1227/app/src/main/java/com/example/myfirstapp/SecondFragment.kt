@@ -1,5 +1,7 @@
 package com.example.myfirstapp
 
+import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,19 +13,56 @@ import com.example.myfirstapp.adapter.GalleryImageAdapter
 import com.example.myfirstapp.adapter.GalleryImageClickListener
 import com.example.myfirstapp.adapter.Image
 import com.example.myfirstapp.fragment.GalleryFullscreenFragment
+import android.widget.Toast
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.content.Intent
+import android.util.Log
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.FileNotFoundException
 
 
 class SecondFragment : Fragment(), GalleryImageClickListener {
     private val SPAN_COUNT = 3
-    private val imageList = ArrayList<Image>()
+    private val imageList = ArrayList<Bitmap>()
     lateinit var galleryAdapter: GalleryImageAdapter
     private var recyclerView: RecyclerView? = null
+    private val GALLERY_REQUEST_CODE = 3001
 
+    override fun onActivityResult(reqCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(reqCode, resultCode, data)
+        Log.d("onActivityResult>>", "I got result : [reqCode = " + reqCode.toString() + ", resultCode = " + resultCode.toString() + ", data = " + data.toString() + "]")
+        if (resultCode == RESULT_OK) {
+            try {
+                val imageUri = data!!.data
+                val imageStream = context?.contentResolver?.openInputStream(imageUri)
+                val selectedImage = BitmapFactory.decodeStream(imageStream)
+                imageList.add(selectedImage)
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
+            }
+
+        } else {
+            Toast.makeText(context, "You haven't picked Image", Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+    @SuppressLint("LongLogTag")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_second, container, false)
+
+        view.findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener {
+            val cameraIntent = Intent(Intent.ACTION_GET_CONTENT)
+            cameraIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            cameraIntent.type = "image/*"
+            Log.d("startActivityTriggered>>", "on second fragment")
+            super.getActivity()?.startActivityForResult(Intent.createChooser(cameraIntent, "Select Picture"), GALLERY_REQUEST_CODE)
+        }
 
         galleryAdapter = GalleryImageAdapter(imageList)
         galleryAdapter.listener = this
@@ -31,38 +70,11 @@ class SecondFragment : Fragment(), GalleryImageClickListener {
         recyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
         recyclerView!!.layoutManager = GridLayoutManager(context, SPAN_COUNT)
         recyclerView!!.adapter = galleryAdapter
-
         loadImages()
-
         return view
     }
 
     private fun loadImages() {
-        imageList.add(Image("https://i.ibb.co/wBYDxLq/beach.jpg", "Beach Houses"))
-        imageList.add(Image("https://i.ibb.co/gM5NNJX/butterfly.jpg", "Butterfly"))
-        imageList.add(Image("https://i.ibb.co/10fFGkZ/car-race.jpg", "Car Racing"))
-        imageList.add(Image("https://i.ibb.co/ygqHsHV/coffee-milk.jpg", "Coffee with Milk"))
-        imageList.add(Image("https://i.ibb.co/7XqwsLw/fox.jpg", "Fox"))
-        imageList.add(Image("https://i.ibb.co/L1m1NxP/girl.jpg", "Mountain Girl"))
-        imageList.add(Image("https://i.ibb.co/wc9rSgw/desserts.jpg", "Desserts Table"))
-        imageList.add(Image("https://i.ibb.co/wdrdpKC/kitten.jpg", "Kitten"))
-        imageList.add(Image("https://i.ibb.co/dBCHzXQ/paris.jpg", "Paris Eiffel"))
-        imageList.add(Image("https://i.ibb.co/JKB0KPk/pizza.jpg", "Pizza Time"))
-        imageList.add(Image("https://i.ibb.co/VYYPZGk/salmon.jpg", "Salmon "))
-        imageList.add(Image("https://i.ibb.co/JvWpzYC/sunset.jpg", "Sunset in Beach"))
-        imageList.add(Image("https://i.ibb.co/wBYDxLq/beach.jpg", "Beach Houses"))
-        imageList.add(Image("https://i.ibb.co/wBYDxLq/beach.jpg", "Beach Houses"))
-        imageList.add(Image("https://i.ibb.co/wBYDxLq/beach.jpg", "Beach Houses"))
-        imageList.add(Image("https://i.ibb.co/wBYDxLq/beach.jpg", "Beach Houses"))
-        imageList.add(Image("https://i.ibb.co/wBYDxLq/beach.jpg", "Beach Houses"))
-        imageList.add(Image("https://i.ibb.co/wBYDxLq/beach.jpg", "Beach Houses"))
-        imageList.add(Image("https://i.ibb.co/L1m1NxP/girl.jpg", "Mountain Girl"))
-        imageList.add(Image("https://i.ibb.co/L1m1NxP/girl.jpg", "Mountain Girl"))
-        imageList.add(Image("https://i.ibb.co/L1m1NxP/girl.jpg", "Mountain Girl"))
-        imageList.add(Image("https://i.ibb.co/L1m1NxP/girl.jpg", "Mountain Girl"))
-        imageList.add(Image("https://i.ibb.co/L1m1NxP/girl.jpg", "Mountain Girl"))
-        imageList.add(Image("https://i.ibb.co/L1m1NxP/girl.jpg", "Mountain Girl"))
-        imageList.add(Image("https://i.ibb.co/L1m1NxP/girl.jpg", "Mountain Girl"))
         galleryAdapter.notifyDataSetChanged()
     }
 

@@ -1,5 +1,6 @@
 package com.example.myfirstapp
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -29,6 +30,13 @@ class MainActivity : AppCompatActivity() {
         val fragmentAdapter = MyPagerAdapter(supportFragmentManager)
         viewpager_main.adapter = fragmentAdapter
         tabs_main.setupWithViewPager(viewpager_main)
+    }
+
+    @SuppressLint("ResourceType")
+    fun onActivityResult(activityResultEvent: ActivityResultEvent){
+        Log.d("gotActivityResult>>", "on main activity")
+        val fragment = supportFragmentManager.findFragmentById(R.layout.fragment_second)
+        fragment?.onActivityResult(activityResultEvent.requestCode, activityResultEvent.resultCode, activityResultEvent.data)
     }
 
     override fun onRequestPermissionsResult(

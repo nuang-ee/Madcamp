@@ -1,6 +1,9 @@
 package com.example.myfirstapp.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.media.ThumbnailUtils
+import android.media.ThumbnailUtils.extractThumbnail
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +13,7 @@ import com.example.myfirstapp.R
 import com.example.myfirstapp.helper.GlideApp
 import kotlinx.android.synthetic.main.img_item.view.*
 
-class GalleryImageAdapter(private val itemList: List<Image>) : RecyclerView.Adapter<GalleryImageAdapter.ViewHolder>() {
+class GalleryImageAdapter(private val itemList: List<Bitmap>) : RecyclerView.Adapter<GalleryImageAdapter.ViewHolder>() {
     private var context: Context? = null
     var listener: GalleryImageClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryImageAdapter.ViewHolder {
@@ -29,11 +32,13 @@ class GalleryImageAdapter(private val itemList: List<Image>) : RecyclerView.Adap
         fun bind() {
             val image = itemList.get(adapterPosition)
             // load image
-            GlideApp.with(context!!)
-                .load(image.imageUrl)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(itemView.ivGalleryImage)
+            val thumbnail = extractThumbnail(image, itemView.ivGalleryImage.width, itemView.ivGalleryImage.height)
+            itemView.ivGalleryImage.setImageBitmap(thumbnail)
+//            GlideApp.with(context!!)
+//                .load(image.imageUrl)
+//                .centerCrop()
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .into(itemView.ivGalleryImage)
             // adding click or tap handler for our image layout
             itemView.container.setOnClickListener {
                 listener?.onClick(adapterPosition)
